@@ -55,15 +55,25 @@ while True:
         print("Cargando información de los archivos ....")
 
     elif int(inputs[0]) == 2:
-        
+        ciudad = input("ingrese una ciudad para consultar avistamiento: ")
+        listaciudad = controller.getAvisCiudad(catalog, ciudad)
+        sizeLista= lt.size(listaciudad)
+        print("El total de avistamientos en " + str(ciudad)+ " es: " +str(sizeLista))
+        listafechas = controller.getListaFechas(listaciudad)
+        listaOrdenada= controller.getOrdenarLista(listafechas)
+        ordenada= controller.getrdenarArtistas(listaOrdenada, listaciudad)
+        primeros3= controller.getprimeros3(ordenada)
+        print("La información de los primeros 3 avistamientos es: "+str(primeros3))
+        ultimos3 = controller.getultimos3(ordenada)
+        print("La información de los últimos 3 avistamientos es: "+str(ultimos3))
     elif int(inputs[0]) == 3:
-
+        pass
     elif int(inputs[0]) == 4:
-
+        pass
     elif int(inputs[0]) == 5:
-
+        pass
     elif int(inputs[0]) == 6:
-
+        pass
     else:
         sys.exit(0)
 sys.exit(0)

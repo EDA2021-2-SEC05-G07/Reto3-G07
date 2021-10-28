@@ -52,6 +52,28 @@ def loadData(analyzer):
     for avist in input_file:
         model.addAvist(analyzer, avist)
     return analyzer
+#req 1
+def getAvisCiudad(catalog, ciudad):
+    listaciudad = model.addAvist(catalog, ciudad)
+    return listaciudad
+
+def getListaFechas(listaciudad):
+    listafechas= model.listaFechas(listaciudad)
+    return listafechas
+
+def getOrdenarLista(listafechas):
+    listaOrdenada = model.ordenarlista(listafechas)
+    return listaOrdenada
+
+def getrdenarArtistas(listaOrdenada, listaciudad):
+    ordenada = model.ordenarArtistas(listaOrdenada, listaciudad)
+    return ordenada
+def getprimeros3(ordenada):
+    primeros = model.primeros3(ordenada)
+    return primeros
+def getultimos3(ordenada):
+    ultimos = model.ultimos3(ordenada)
+    return ultimos
 # Inicialización del Catálogo de libros
 
 # Funciones para la carga de datos
