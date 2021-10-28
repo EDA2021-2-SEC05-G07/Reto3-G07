@@ -28,13 +28,13 @@ import csv
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
-def init():
+def getIniciarDatos():
     """
     Llama la funcion de inicializacion  del modelo.
     """
     # catalog es utilizado para interactuar con el modelo
-    analyzer = model.newAnalyzer()
-    return analyzer
+    catalog = model.iniciarDatos
+    return catalog
 
 
 # _________________
@@ -42,7 +42,7 @@ def init():
 #  de datos en los modelos
 # _________________
 
-def loadData(analyzer):
+def getCargarDatos(catalog):
     """
     Carga los datos de los archivos CSV en el modelo
     """
@@ -50,8 +50,8 @@ def loadData(analyzer):
     input_file = csv.DictReader(open(UFOfile, encoding="utf-8"),
                                 delimiter=",")
     for avist in input_file:
-        model.addAvist(analyzer, avist)
-    return analyzer
+        model.addAvist(catalog, avist)
+    return catalog
 #req 1
 def getAvisCiudad(catalog, ciudad):
     listaciudad = model.addAvist(catalog, ciudad)

@@ -48,12 +48,19 @@ catalog = None
 """
 Menu principal
 """
+def initDatos():
+    return controller.getIniciarDatos()
+
+def cargarDatos(catalog):
+    return controller.getCargarDatos(catalog)
+
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
-
+        catalog = initDatos()
+        cargarDatos(catalog)
     elif int(inputs[0]) == 2:
         ciudad = input("ingrese una ciudad para consultar avistamiento: ")
         listaciudad = controller.getAvisCiudad(catalog, ciudad)
