@@ -30,6 +30,8 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.ADT import orderedmap as om
+import datetime
 assert cf
 
 """
@@ -38,10 +40,64 @@ los mismos.
 """
 
 # Construccion de modelos
+def iniciarDatos():
+    catalog = {'avist': None,
+                'dateIndex': None
+                }
+
+    catalog['avist'] = lt.newList('SINGLE_LINKED', compare)
+    catalog['dateIndex'] = om.newMap(omaptype='BST',
+                                      comparefunction=compare)
+    catalog['city']=om.newMap(omaptype='BST',
+                                      comparefunction=compare)
+    return catalog
 
 # Funciones para agregar informacion al catalogo
+def addAvist(catalog, avist):
+    lt.addLast(catalog['avist'], avist)
+    ciudad = avist['city']
+    esta = om.contains(catalog['city'], ciudad)
+    if not esta:
+        listaCiudad = lt.newList()
+        lt.addLast(listaCiudad, avist)
+        om.put(catalog['city'], ciudad, listaCiudad)
+    else:
+        listaCiudad = om.get(catalog['city'], ciudad)['value']
+        lt.addLast(listaCiudad, avist)
+        om.put(catalog['city'], ciudad, listaCiudad)
 
-# Funciones para creacion de datos
+def compare(valor1, valor2):
+    """
+    Compara dos crimenes
+    """
+    if (valor1 == valor2):
+        return 0
+    elif valor1 > valor2:
+        return 1
+    else:
+        return -1
+
+# Requerimiento 1
+def avistCiudad(catalog, ciudad):
+    cantidadCiudades=0
+    cantidadAvistCiudad=0
+    listaCiudad= newlst
+    for ciudad in lt.iterator(catalog['city']):
+        cantidadCiudades+=1
+        if catalog['city'] == ciudad:
+            for linea in catalog['city']
+
+            cantidadAvistCiudad+=1
+                nuevaObra=lt.newList()
+                lt.addLast(nuevaObra,obra['Title'])
+                lt.addLast(nuevaObra,obra['Date'])
+                lt.addLast(nuevaObra,obra['Medium'])
+                lt.addLast(nuevaObra,obra['Dimensions'])
+                lt.addLast(listaciudad,nuevaObra)
+
+    
+    tupla=(cantidadobras, tecnicas, masgrande)
+    return listaciudad
 
 # Funciones de consulta
 

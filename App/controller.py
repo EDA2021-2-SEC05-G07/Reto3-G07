@@ -28,7 +28,30 @@ import csv
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 """
+def init():
+    """
+    Llama la funcion de inicializacion  del modelo.
+    """
+    # catalog es utilizado para interactuar con el modelo
+    analyzer = model.newAnalyzer()
+    return analyzer
 
+
+# _________________
+#  Funciones para la carga de datos y almacenamiento
+#  de datos en los modelos
+# _________________
+
+def loadData(analyzer):
+    """
+    Carga los datos de los archivos CSV en el modelo
+    """
+    UFOfile = cf.data_dir + 'UFOS-utf8-small.csv'
+    input_file = csv.DictReader(open(UFOfile, encoding="utf-8"),
+                                delimiter=",")
+    for avist in input_file:
+        model.addAvist(analyzer, avist)
+    return analyzer
 # Inicialización del Catálogo de libros
 
 # Funciones para la carga de datos
