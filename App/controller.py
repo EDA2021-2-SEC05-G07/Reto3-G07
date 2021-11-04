@@ -55,7 +55,7 @@ def getCargarDatos(catalog):
     return catalog
 #req 1
 def getListaCiudad(catalog, ciudad):
-    listaCiudad = model.ListaCiudad
+    listaCiudad = model.ListaCiudad()
     return listaCiudad
 
 def getAvisCiudad2(catalog, ciudad):
