@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+
 import config as cf
 import sys
 import controller
@@ -63,12 +64,11 @@ while True:
         cargarDatos(catalog)
     elif int(inputs[0]) == 2:
         ciudad = input("ingrese una ciudad para consultar avistamiento: ")
-        listaciudad = controller.getAvisCiudad(catalog, ciudad)
+        tamaño, listaciudad = controller.getAvisCiudad(catalog, ciudad)
         sizeLista= lt.size(listaciudad)
         print("El total de avistamientos en " + str(ciudad)+ " es: " +str(sizeLista))
-        listafechas = controller.getListaFechas(listaciudad)
-        listaOrdenada= controller.getOrdenarLista(listafechas)
-        ordenada= controller.getrdenarArtistas(listaOrdenada, listaciudad)
+        print("El numero de ciudades con avistamientos es: " + str(tamaño))
+        ordenada = listaciudad
         primeros3= controller.getprimeros3(ordenada)
         print("La información de los primeros 3 avistamientos es: "+str(primeros3))
         ultimos3 = controller.getultimos3(ordenada)

@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+from DISClib.DataStructures.rbt import moveRedLeft
 import config as cf
 import model
 import csv
@@ -33,7 +34,7 @@ def getIniciarDatos():
     Llama la funcion de inicializacion  del modelo.
     """
     # catalog es utilizado para interactuar con el modelo
-    catalog = model.iniciarDatos
+    catalog = model.iniciarDatos()
     return catalog
 
 
@@ -53,24 +54,18 @@ def getCargarDatos(catalog):
         model.addAvist(catalog, avist)
     return catalog
 #req 1
-def getAvisCiudad(catalog, ciudad):
-    listaciudad = model.addAvist(catalog, ciudad)
-    return listaciudad
+def getListaCiudad(catalog, ciudad):
+    listaCiudad = model.ListaCiudad
+    return listaCiudad
 
-def getListaFechas(listaciudad):
-    listafechas= model.listaFechas(listaciudad)
-    return listafechas
+def getAvisCiudad2(catalog, ciudad):
+    tamaño,listaCiudad = model.avistCiudad2(catalog, ciudad)
+    return tamaño, listaCiudad
 
-def getOrdenarLista(listafechas):
-    listaOrdenada = model.ordenarlista(listafechas)
-    return listaOrdenada
-
-def getrdenarArtistas(listaOrdenada, listaciudad):
-    ordenada = model.ordenarArtistas(listaOrdenada, listaciudad)
-    return ordenada
 def getprimeros3(ordenada):
     primeros = model.primeros3(ordenada)
     return primeros
+
 def getultimos3(ordenada):
     ultimos = model.ultimos3(ordenada)
     return ultimos

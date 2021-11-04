@@ -67,48 +67,32 @@ def addAvist(catalog, avist):
         om.put(catalog['city'], ciudad, listaCiudad)
 
 # Requerimiento 1
-def avistCiudad(catalog, ciudad):
-    cantidadCiudades=0
-    cantidadAvistCiudad=0
+def ListaCiudad(catalog, ciudad):
     listaciudad= lt.newList()
-    for ciudad in lt.iterator(catalog['city']):
-        cantidadCiudades+=1
-        if catalog['city'] == ciudad:
-            for linea in catalog['city']:
-                cantidadAvistCiudad+= 1
-                info =lt.newList()
-                lt.addLast(info, linea['datetime'])
-                lt.addLast(info, linea['city'])
-                lt.addLast(info, linea['country'])
-                lt.addLast(info, linea['duration (seconds)'])
-                lt.addLast(info, linea['shape'])
-                lt.addLast(listaciudad, info)
+    if ciudad in lt.iterator(om.keySet(catalog['city'])):
+        for ciudad in lt.iterator(om.keySet(catalog['city'])):
+            info =lt.newList()
+            lt.addLast(info, ciudad['datetime'])
+            lt.addLast(info, ciudad['city'])
+            lt.addLast(info, ciudad['country'])
+            lt.addLast(info, ciudad['duration (seconds)'])
+            lt.addLast(info, ciudad['shape'])
+            lt.addLast(listaciudad, info)
     return listaciudad
-
-def listaFechas(listaciudad):
-    listafechas= lt.newList()
-    for linea in listaciudad:
-        lt.addLast(listafechas, linea['datetime'])
-    return listafechas
-
-def ordenarlista(listafechas):
-    listaOrdenada=sa.sort(listafechas, compare)
-    return listaOrdenada
-
-def ordenarArtistas(listaOrdenada, listaciudad):
-    ordenada = lt.newList
-    for fecha in listaOrdenada:
-        for linea in listaciudad:
-            if fecha == linea['datetime']:
-                lt.addLast(ordenada, linea)
-    return ordenada 
+def avistCiudad2(catalog, ciudad):
+    tamaño = lt.size(om.keySet(catalog['city']))
+    entry = om.get(catalog['city'], ciudad)
+    listaCiudad = me.getValue(entry)
+    listaOrdenada = sa.sort(listaCiudad, compareDates)
+    print(listaOrdenada)
+    return tamaño,listaOrdenada
 
 def primeros3(ordenada):
     primeros=lt.subList(ordenada, 1, 3)
     return primeros
 
 def ultimos3(ordenada):
-    ultimos=lt.subList(ordenada, (lt.size(ordenada))-2, 3)
+    ultimos=lt.subList(ordenada, (lt.size(ordenada))-3, 3)
     return ultimos
 # Funciones de consulta
 
@@ -125,3 +109,9 @@ def compare(valor1, valor2):
         return 1
     else:
         return -1
+def compareDates(ufo1, ufo2):
+    date1= datetime.datetime.strptime(ufo1['datetime'],"%Y-%m-%d %H:%M:%S")
+    date2= datetime.datetime.strptime(ufo2['datetime'],"%Y-%m-%d %H:%M:%S")
+    fecha1 = date1.date()
+    fecha2 = date2.date()
+    return fecha1 < fecha2
