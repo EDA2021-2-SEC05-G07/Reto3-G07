@@ -25,6 +25,7 @@
  """
 
 
+from DISClib.DataStructures.arraylist import addLast
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
@@ -50,6 +51,8 @@ def iniciarDatos():
                                       comparefunction=compare)
     catalog['city']=om.newMap(omaptype='BST',
                                       comparefunction=compare)
+    catalog['duration(hour/min)'] = om.newMap(omaptype='BST', 
+                                        comparefunction=compare)
     return catalog
 
 # Funciones para agregar informacion al catalogo
@@ -65,6 +68,18 @@ def addAvist(catalog, avist):
         listaCiudad = om.get(catalog['city'], ciudad)['value']
         lt.addLast(listaCiudad, avist)
         om.put(catalog['city'], ciudad, listaCiudad)
+    #añadir al indice para req 3
+    durationHM = avist['duration (hour/min)']
+    estaDuration = om.contains(catalog['duration(hour/min)'], durationHM)
+    if not estaDuration:
+        lstDurationHM= lt.newList()
+        lt.addLast(lstDurationHM,avist)
+        om.put(catalog['duration(hour/min)'], durationHM, lstDurationHM)
+    else: 
+        lstDurationHM = om.get(catalog['duration(hour/min)'], durationHM)['value']
+        lt.addLast(lstDurationHM, avist)
+        om.put(catalog['duration(hour/min)'], durationHM, lstDurationHM)
+
 
 # Requerimiento 1
 def ListaCiudad(catalog, ciudad):
@@ -94,6 +109,22 @@ def primeros3(ordenada):
 def ultimos3(ordenada):
     ultimos=lt.subList(ordenada, (lt.size(ordenada))-3, 3)
     return ultimos
+
+#req 3
+def durationHrs_min(catalog, maximum, minimun):
+    lst_llaves= lt.newList()
+    llaves_rango = om.keys(catalog['duration(hour/min)'],minimun, maximum)
+    lt.addLast(lst_llaves, llaves_rango)
+    listaOrdenada = sa.sort(lst_llaves, compareDates)
+    #cambiar comparedates por el formato!!
+    for avist in lst_llaves:
+        info = lt.newList()
+        lt.addLast(info, avist['datetime'])
+        lt.addLast(info, avist['city'])
+        lt.addLast(info, avist['country'])
+        lt.addLast(info, avist['duration (seconds)'])
+        lt.addLast(info, avist['shape'])
+        pass 
 # Funciones de consulta
 
 # Funciones utilizadas para comparar elementos dentro de una lista
