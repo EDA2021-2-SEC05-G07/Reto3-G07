@@ -51,7 +51,7 @@ def iniciarDatos():
                                       comparefunction=compare)
     catalog['city']=om.newMap(omaptype='BST',
                                       comparefunction=compare)
-    catalog['duration(hour/min)'] = om.newMap(omaptype='BST', 
+    catalog['duration (hours/min)'] = om.newMap(omaptype='BST', 
                                         comparefunction=compare)
     return catalog
 
@@ -69,16 +69,16 @@ def addAvist(catalog, avist):
         lt.addLast(listaCiudad, avist)
         om.put(catalog['city'], ciudad, listaCiudad)
     #añadir al indice para req 3
-    durationHM = avist['duration (hour/min)']
-    estaDuration = om.contains(catalog['duration(hour/min)'], durationHM)
+    durationHM = avist['duration (hours/min)']
+    estaDuration = om.contains(catalog['duration (hours/min)'], durationHM)
     if not estaDuration:
         lstDurationHM= lt.newList()
         lt.addLast(lstDurationHM,avist)
-        om.put(catalog['duration(hour/min)'], durationHM, lstDurationHM)
+        om.put(catalog['duration (hours/min)'], durationHM, lstDurationHM)
     else: 
-        lstDurationHM = om.get(catalog['duration(hour/min)'], durationHM)['value']
+        lstDurationHM = om.get(catalog['duration (hours/min)'], durationHM)['value']
         lt.addLast(lstDurationHM, avist)
-        om.put(catalog['duration(hour/min)'], durationHM, lstDurationHM)
+        om.put(catalog['duration (hours/min)'], durationHM, lstDurationHM)
 
 
 # Requerimiento 1
