@@ -76,9 +76,23 @@ while True:
     elif int(inputs[0]) == 3:
         pass
     elif int(inputs[0]) == 4:
-        pass
+        inferior = input("Ingrese el ímite inferior en formato HH: MM.")
+        superior = input("Ingrese el límite superior en formato HH: MM.")
+        size, listaOrdenada = controller.getdurationHrs_min(catalog, inferior, superior)
+        print("El total de los avistamientos en el rango es: "+ str(size))
+        prim3= controller.getprimeros3(listaOrdenada)
+        print("los primeros 3 avistamientos dentro del rango son: " + str(prim3))
+        ult3= controller.getultimos3(listaOrdenada)
+        print("los ultimos 3 avistamientos dentro del rango son: " + str(ult3))
     elif int(inputs[0]) == 5:
-        pass
+        inferior = input("Ingrese el ímite inferior en formato AAAA-MM-DD.")
+        superior = input("Ingrese el límite superior en formato AAAA-MM-DD")
+        size, listaOrdenada = controller.getavistRangoFechas(catalog, inferior, superior)
+        print("El total de los avistamientos en el rango es: "+ str(size))
+        prim3= controller.getprimeros3(listaOrdenada)
+        print("los primeros 3 avistamientos dentro del rango son: " + str(prim3))
+        ult3= controller.getultimos3(listaOrdenada)
+        print("los ultimos 3 avistamientos dentro del rango son: " + str(ult3))
     elif int(inputs[0]) == 6:
         pass
     else:

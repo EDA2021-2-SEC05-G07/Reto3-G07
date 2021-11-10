@@ -25,7 +25,8 @@
  """
 
 
-from DISClib.DataStructures.arraylist import addLast
+
+from DISClib.DataStructures.arraylist import newList
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
@@ -53,6 +54,8 @@ def iniciarDatos():
                                       comparefunction=compare)
     catalog['duration (hours/min)'] = om.newMap(omaptype='BST', 
                                         comparefunction=compare)
+    catalog['datetime'] = om.newMap(omaptype='BST', 
+                                        comparefunction=compare)
     return catalog
 
 # Funciones para agregar informacion al catalogo
@@ -68,7 +71,7 @@ def addAvist(catalog, avist):
         listaCiudad = om.get(catalog['city'], ciudad)['value']
         lt.addLast(listaCiudad, avist)
         om.put(catalog['city'], ciudad, listaCiudad)
-    #añadir al indice para req 3
+    #indice para req 3
     durationHM = avist['duration (hours/min)']
     estaDuration = om.contains(catalog['duration (hours/min)'], durationHM)
     if not estaDuration:
@@ -79,7 +82,18 @@ def addAvist(catalog, avist):
         lstDurationHM = om.get(catalog['duration (hours/min)'], durationHM)['value']
         lt.addLast(lstDurationHM, avist)
         om.put(catalog['duration (hours/min)'], durationHM, lstDurationHM)
-
+    #indice fechas
+    datetime = avist['datetime']
+    estaDatetime = om.contains(catalog['datetime'], datetime)
+    if not estaDatetime:
+        lstDatetime= lt.newList()
+        lt.addLast(lstDatetime,avist)
+        om.put(catalog['datetime'], datetime, lstDatetime)
+    else: 
+        lstDatetime = om.get(catalog['datetime'], datetime)['value']
+        lt.addLast(lstDatetime, avist)
+        om.put(catalog['datetime'], datetime, lstDatetime)
+    
 
 # Requerimiento 1
 def ListaCiudad(catalog, ciudad):
@@ -113,21 +127,46 @@ def ultimos3(ordenada):
     return ultimos
 
 #req 3
-def durationHrs_min(catalog, maximum, minimun):
-    lst_llaves= lt.newList()
-    llaves_rango = om.keys(catalog['duration(hour/min)'],minimun, maximum)
-    lt.addLast(lst_llaves, llaves_rango)
-    listaOrdenada = sa.sort(lst_llaves, compareDates)
-    #cambiar comparedates por el formato!!
-    for avist in lst_llaves:
-        info = lt.newList()
-        lt.addLast(info, avist['datetime'])
-        lt.addLast(info, avist['city'])
-        lt.addLast(info, avist['country'])
-        lt.addLast(info, avist['duration (seconds)'])
-        lt.addLast(info, avist['shape'])
-        pass 
+def durationHrs_min(catalog, inferior, superior):
+    llaves_rango = om.keys(catalog['duration (hours/min)'],inferior, superior)
+    size = lt.size(llaves_rango)
+    for duration in lt.iterator(llaves_rango):
+        entry = om.get(catalog['duration (hours/min)'], duration)
+        valor = me.getValue(entry)
+        for linea in lt.iterator(valor):
+            lst = lt.newList()
+            info = lt.newList()
+            lt.addLast(info, linea['datetime'])
+            lt.addLast(info, linea['city'])
+            lt.addLast(info, linea['country'])
+            lt.addLast(info, linea['duration (seconds)'])
+            lt.addLast(info, linea['shape'])
+            lt.addLast(lst,info)
+    listaOrdenada = sa.sort(lst, compareDurationH_M)
+    return size, listaOrdenada
+
 #Req 4
+def avistRangoFechas(catalog, inferior, superior):
+    llaves_rango = om.keys(catalog['datetime'],inferior, superior)
+    size = lt.size(llaves_rango)
+    for fecha in lt.iterator(llaves_rango):
+        entry = om.get(catalog['datetime'], fecha)
+        valor = me.getValue(entry)
+        for linea in lt.iterator(valor):
+            lst = lt.newList()
+            info = lt.newList()
+            lt.addLast(info, linea['datetime'])
+            lt.addLast(info, linea['city'])
+            lt.addLast(info, linea['country'])
+            lt.addLast(info, linea['duration (seconds)'])
+            lt.addLast(info, linea['shape'])
+            lt.addLast(lst,info)
+    listaOrdenada = sa.sort(lst, compareDates)
+    return size, listaOrdenada
+    #for llave in lt.iterator(llaves_rango):
+        
+    
+
 
 # Funciones de consulta
 
@@ -150,3 +189,9 @@ def compareDates(ufo1, ufo2):
     fecha1 = date1.date()
     fecha2 = date2.date()
     return fecha1 < fecha2
+def compareDurationH_M(ufo1, ufo2):
+    dur1= datetime.datetime.strptime(ufo1['duration (hours/min)'], "%H:%M")
+    dur2= datetime.datetime.strptime(ufo2['duration (hours/min)'], "%H:%M")
+    dura1= dur1.time()
+    dura2= dur2.time()
+    return dura1 < dura2

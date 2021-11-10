@@ -69,6 +69,14 @@ def getprimeros3(ordenada):
 def getultimos3(ordenada):
     ultimos = model.ultimos3(ordenada)
     return ultimos
+#req 3
+def getdurationHrs_min(catalog, inferior, superior):
+    size, listaOrdenada = model.durationHrs_min(catalog, inferior, superior)
+    return size, listaOrdenada
+#req 4
+def getavistRangoFechas(catalog, inferior, superior):
+    size, listaOrdenada = model.avistRangoFechas(catalog, inferior, superior)
+    return size, listaOrdenada
 # Inicialización del Catálogo de libros
 
 # Funciones para la carga de datos
