@@ -97,7 +97,9 @@ def ListaCiudad(catalog, ciudad):
 def avistCiudad2(catalog, ciudad):
     tamaño = lt.size(om.keySet(catalog['city']))
     entry = om.get(catalog['city'], ciudad)
-    listaCiudad = me.getValue(entry)
+    listaCiudad = lt.newList()
+    lt.addLast(listaCiudad, me.getValue(entry))
+    print(listaCiudad)
     listaOrdenada = sa.sort(listaCiudad, compareDates)
     print(listaOrdenada)
     return tamaño,listaOrdenada
@@ -125,6 +127,8 @@ def durationHrs_min(catalog, maximum, minimun):
         lt.addLast(info, avist['duration (seconds)'])
         lt.addLast(info, avist['shape'])
         pass 
+#Req 4
+
 # Funciones de consulta
 
 # Funciones utilizadas para comparar elementos dentro de una lista

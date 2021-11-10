@@ -64,7 +64,7 @@ while True:
         cargarDatos(catalog)
     elif int(inputs[0]) == 2:
         ciudad = input("ingrese una ciudad para consultar avistamiento: ")
-        tamaño, listaciudad = controller.getAvisCiudad(catalog, ciudad)
+        tamaño, listaciudad = controller.getAvisCiudad2(catalog, ciudad)
         sizeLista= lt.size(listaciudad)
         print("El total de avistamientos en " + str(ciudad)+ " es: " +str(sizeLista))
         print("El numero de ciudades con avistamientos es: " + str(tamaño))
