@@ -94,6 +94,17 @@ def addAvist(catalog, avist):
         lstDatetime = om.get(catalog['datetime'], datetime)['value']
         lt.addLast(lstDatetime, avist)
         om.put(catalog['datetime'], datetime, lstDatetime)
+#indice duracion
+    durationSec = avist['duration (seconds)']
+    dursec = om.contains(catalog['duration (seconds)'], durationSec)
+    if not dursec:
+        lstDurationSec= lt.newList()
+        lt.addLast(lstDurationSec,avist)
+        om.put(catalog['duration (seconds)'], durationSec, lstDurationSec)
+    else: 
+        lstDurationSec = om.get(catalog['duration (seconds)'], durationSec)['value']
+        lt.addLast(lstDurationSec, avist)
+        om.put(catalog['duration (seconds)'], durationSec, lstDurationSec)
     
 
 # Requerimiento 1
@@ -130,6 +141,7 @@ def ultimos3(ordenada):
 #req 2
 def duration(catalog, segmin, segmax):
     tiempos= om.values(catalog['duration (seconds)'], segmin, segmax)
+    print(tiempos)
     first= lt.subList(tiempos, 1, 3)
     last=lt.subList(tiempos, -2, 3)
     primeros=lt.newList()
