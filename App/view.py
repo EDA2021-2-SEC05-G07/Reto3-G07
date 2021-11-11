@@ -85,7 +85,7 @@ while True:
         print("los ultimos 3 avistamientos dentro del rango son: " + str(ultimos))
         pass
     elif int(inputs[0]) == 4:
-        inferior = input("Ingrese el límite superior en formato HH: MM.")
+        inferior = input("Ingrese el límite inferior en formato HH: MM.")
         superior = input("Ingrese el límite superior en formato HH: MM.")
         size, listaOrdenada = controller.getdurationHrs_min(catalog, inferior, superior)
         print("El total de los avistamientos en el rango es: "+ str(size))

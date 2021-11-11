@@ -120,6 +120,7 @@ def ListaCiudad(catalog, ciudad):
             lt.addLast(info, ciudad['shape'])
             lt.addLast(listaciudad, info)
     return listaciudad
+    
 def avistCiudad2(catalog, ciudad):
     tamaño = lt.size(om.keySet(catalog['city']))
     entry = om.get(catalog['city'], ciudad)
@@ -180,7 +181,7 @@ def durationHrs_min(catalog, inferior, superior):
             lt.addLast(info, linea['duration (seconds)'])
             lt.addLast(info, linea['shape'])
             lt.addLast(lst,info)
-    listaOrdenada = sa.sort(lst, compareDurationH_M)
+            listaOrdenada = sa.sort(lst, compareDurationH_M)
     return size, listaOrdenada
     
 #Req 4
