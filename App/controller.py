@@ -54,18 +54,12 @@ def getCargarDatos(catalog):
         model.addAvist(catalog, avist)
     return catalog
 #req 1
-def getListaCiudad(catalog, ciudad):
-    listaCiudad = model.ListaCiudad()
-    return listaCiudad
-
-def getAvisCiudad2(catalog, ciudad):
-    tamaño,listaCiudad = model.avistCiudad2(catalog, ciudad)
-    return tamaño, listaCiudad
-
+def getAvistCiudad(catalog, ciudad):
+    size, sizeAvist, listaOrdenada = model.AvistCiudad(catalog, ciudad)
+    return size, sizeAvist, listaOrdenada
 def getprimeros3(ordenada):
     primeros = model.primeros3(ordenada)
     return primeros
-
 def getultimos3(ordenada):
     ultimos = model.ultimos3(ordenada)
     return ultimos
@@ -74,8 +68,8 @@ def getduration(catalog, segmin, segmax):
     duration= model.duration(catalog, segmin, segmax)
     return duration
 #req 3
-def getdurationHrs_min(catalog, inferior, superior):
-    size, listaOrdenada = model.durationHrs_min(catalog, inferior, superior)
+def getAvistHora(catalog, inferior, superior):
+    size, listaOrdenada = model.AvistHora(catalog, inferior, superior)
     return size, listaOrdenada
 #req 4
 def getavistRangoFechas(catalog, inferior, superior):

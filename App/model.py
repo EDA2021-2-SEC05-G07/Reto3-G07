@@ -51,7 +51,7 @@ def iniciarDatos():
                                       comparefunction=compare)
     catalog['city']=om.newMap(omaptype='BST',
                                       comparefunction=compare)
-    catalog['duration (hours/min)'] = om.newMap(omaptype='BST', 
+    catalog['datetime hora'] = om.newMap(omaptype='BST', 
                                         comparefunction=compare)
     catalog['datetime'] = om.newMap(omaptype='BST', 
                                         comparefunction=compare)
@@ -74,30 +74,32 @@ def addAvist(catalog, avist):
         listaCiudad = om.get(catalog['city'], ciudad)['value']
         lt.addLast(listaCiudad, avist)
         om.put(catalog['city'], ciudad, listaCiudad)
-     #indice para req 3
-    durationHM = avist['duration (hours/min)']
-    estaDuration = om.contains(catalog['duration (hours/min)'], durationHM)
-    if not estaDuration:
-        lstDurationHM= lt.newList()
-        lt.addLast(lstDurationHM,avist)
-        om.put(catalog['duration (hours/min)'], durationHM, lstDurationHM)
-    else: 
-        lstDurationHM = om.get(catalog['duration (hours/min)'], durationHM)['value']
-        lt.addLast(lstDurationHM, avist)
-        om.put(catalog['duration (hours/min)'], durationHM, lstDurationHM)
-  #indice fechas
-    datetime = avist['datetime']
-    estaDatetime = om.contains(catalog['datetime'], datetime)
+    #indice para req 3
+    datetim = datetime.datetime.strptime(avist['datetime'],"%Y-%m-%d %H:%M:%S")
+    fecha = datetim.time()
+    estaDatetime = om.contains(catalog['datetime hora'], fecha)
     if not estaDatetime:
         lstDatetime= lt.newList()
         lt.addLast(lstDatetime,avist)
-        om.put(catalog['datetime'], datetime, lstDatetime)
+        om.put(catalog['datetime hora'], fecha, lstDatetime)
     else: 
-        lstDatetime = om.get(catalog['datetime'], datetime)['value']
+        lstDatetime = om.get(catalog['datetime hora'], fecha)['value']
         lt.addLast(lstDatetime, avist)
-        om.put(catalog['datetime'], datetime, lstDatetime)
+        om.put(catalog['datetime hora'], fecha, lstDatetime)
+    #indice req 4 
+    datetim = datetime.datetime.strptime(avist['datetime'],"%Y-%m-%d %H:%M:%S")
+    fecha = datetim.date()
+    estaDatetime = om.contains(catalog['datetime'], fecha)
+    if not estaDatetime:
+        lstDatetime= lt.newList()
+        lt.addLast(lstDatetime,avist)
+        om.put(catalog['datetime'], fecha, lstDatetime)
+    else: 
+        lstDatetime = om.get(catalog['datetime'], fecha)['value']
+        lt.addLast(lstDatetime, avist)
+        om.put(catalog['datetime'], fecha, lstDatetime)
     #indice duracion
-    durationSec = avist['duration (seconds)']
+    durationSec = float(avist['duration (seconds)'])
     dursec = om.contains(catalog['duration (seconds)'], durationSec)
     if not dursec:
         lstDurationSec= lt.newList()
@@ -109,9 +111,9 @@ def addAvist(catalog, avist):
         om.put(catalog['duration (seconds)'], durationSec, lstDurationSec)
     
     #indice longitud
-    long = avist['longitude']
+    long = float(avist['longitude'])
     l = om.contains(catalog['longitude'], long)
-    if not dursec:
+    if not l:
         lstlong= lt.newList()
         lt.addLast(lstlong,avist)
         om.put(catalog['longitude'], long, lstlong)
@@ -121,140 +123,78 @@ def addAvist(catalog, avist):
         om.put(catalog['longitude'], long, lstlong)
 
 # Requerimiento 1
-def ListaCiudad(catalog, ciudad):
-    listaciudad= lt.newList()
-    if ciudad in lt.iterator(om.keySet(catalog['city'])):
-        for ciudad in lt.iterator(om.keySet(catalog['city'])):
-            info =lt.newList()
-            lt.addLast(info, ciudad['datetime'])
-            lt.addLast(info, ciudad['city'])
-            lt.addLast(info, ciudad['country'])
-            lt.addLast(info, ciudad['duration (seconds)'])
-            lt.addLast(info, ciudad['shape'])
-            lt.addLast(listaciudad, info)
-    return listaciudad
-
-def avistCiudad2(catalog, ciudad):
-    tamaño = lt.size(om.keySet(catalog['city']))
-    entry = om.get(catalog['city'], ciudad)
-    listaCiudad = lt.newList()
-    lt.addLast(listaCiudad, me.getValue(entry))
-    print(listaCiudad)
-    listaOrdenada = sa.sort(listaCiudad, compareDates)
-    print(listaOrdenada)
-    return tamaño,listaOrdenada
+def AvistCiudad(catalog, ciudad):
+    pareja = om.get(catalog['city'], ciudad)
+    valor = me.getValue(pareja)
+    listaOrdenada = sa.sort(valor, compareDates)
+    size = lt.size(listaOrdenada)
+    sizeAvist = lt.size(om.keySet(catalog['city']))
+    return size, sizeAvist, listaOrdenada
 
 def primeros3(ordenada):
     primeros=lt.subList(ordenada, 1, 3)
     return primeros
 
 def ultimos3(ordenada):
-    ultimos=lt.subList(ordenada, (lt.size(ordenada))-3, 3)
+    ultimos=lt.subList(ordenada, (lt.size(ordenada))-2, 3)
     return ultimos
-
 #req 2
 def duration(catalog, segmin, segmax):
     tiempos= om.values(catalog['duration (seconds)'], segmin, segmax)
-    print(tiempos)
-    first= lt.subList(tiempos, 1, 3)
-    last=lt.subList(tiempos, -2, 3)
-    primeros=lt.newList()
-    ultimos=lt.newList()
-    for linea in first:
-        x= lt.newList()
-        lt.addLast(x,linea['datetime'])
-        lt.addLast(x,linea['city'])
-        lt.addLast(x,linea['country'])
-        lt.addLast(x,linea['duration (seconds)'])
-        lt.addLast(x,linea['shape'])
-        lt.addLast(primeros,x)
-    for linea in last:
-        x= lt.newList()
-        lt.addLast(x,linea['datetime'])
-        lt.addLast(x,linea['city'])
-        lt.addLast(x,linea['country'])
-        lt.addLast(x,linea['duration (seconds)'])
-        lt.addLast(x,linea['shape'])
-        lt.addLast(ultimos,x)
-    return (tiempos, primeros, ultimos)
+    lst= lt.newList()
+    for avist in lt.iterator(tiempos):
+        for x in lt.iterator(avist):
+            lt.addLast(lst, x)
+    listaOrdenada = sa.sort(lst, compareDates)
+    first= lt.subList(listaOrdenada, 1, 3)
+    last=lt.subList(listaOrdenada, lt.size(listaOrdenada)-2, 3)
+    return (listaOrdenada, first, last)
 
 #req 3
-def durationHrs_min(catalog, inferior, superior):
-    llaves_rango = om.keys(catalog['duration (hours/min)'],inferior, superior)
-    size = lt.size(llaves_rango)
-    for duration in lt.iterator(llaves_rango):
-        entry = om.get(catalog['duration (hours/min)'], duration)
+def AvistHora(catalog, inferior, superior):
+    inf = datetime.datetime.strptime(inferior,"%H:%M:%S")
+    inf2 = inf.time()
+    sup = datetime.datetime.strptime(superior,"%H:%M:%S")
+    sup2 = sup.time()
+    llaves_rango = om.keys(catalog['datetime hora'],inf2, sup2)
+    lista = lt.newList()
+    for hora in lt.iterator(llaves_rango):
+        entry = om.get(catalog['datetime hora'], hora)
         valor = me.getValue(entry)
         for linea in lt.iterator(valor):
-            lst = lt.newList()
-            info = lt.newList()
-            lt.addLast(info, linea['datetime'])
-            lt.addLast(info, linea['city'])
-            lt.addLast(info, linea['country'])
-            lt.addLast(info, linea['duration (seconds)'])
-            lt.addLast(info, linea['shape'])
-            lt.addLast(lst,info)
-    listaOrdenada = sa.sort(lst, compareDurationH_M)
+            lt.addLast(lista,linea)
+    listaOrdenada = sa.sort(lista, compareDates)
+    size = lt.size(listaOrdenada)
     return size, listaOrdenada
     
 #Req 4
 def avistRangoFechas(catalog, inferior, superior):
-    llaves_rango = om.keys(catalog['datetime'],inferior, superior)
-    size = lt.size(llaves_rango)
+    inf = datetime.datetime.strptime(inferior,"%Y-%m-%d")
+    inf2 = inf.date()
+    sup = datetime.datetime.strptime(superior,"%Y-%m-%d")
+    sup2 = sup.date()
+    llaves_rango = om.keys(catalog['datetime'],inf2, sup2)
+    lista = lt.newList()
     for fecha in lt.iterator(llaves_rango):
         entry = om.get(catalog['datetime'], fecha)
         valor = me.getValue(entry)
         for linea in lt.iterator(valor):
-            lst = lt.newList()
-            info = lt.newList()
-            lt.addLast(info, linea['datetime'])
-            lt.addLast(info, linea['city'])
-            lt.addLast(info, linea['country'])
-            lt.addLast(info, linea['duration (seconds)'])
-            lt.addLast(info, linea['shape'])
-            lt.addLast(lst,info)
-    listaOrdenada = sa.sort(lst, compareDates)
+            lt.addLast(lista, linea)
+    listaOrdenada = sa.sort(lista, compareDates)
+    size = lt.size(listaOrdenada)
     return size, listaOrdenada
 #req 5
 def avistZona(catalog, longmin, longmax, latmin, latmax):
     zonas= lt.newList()
     avist= om.values(catalog['longitude'], longmin, longmax)
-    for avistamiento in avist:
-        if avistamiento['latitude'] >= latmin and avistamiento['latitude'] <= latmax:
-            lt.addLast(zonas, avistamiento)
+    for avistamientos in lt.iterator(avist):
+        for avistamiento in lt.iterator(avistamientos):
+            if float(avistamiento['latitude']) >= latmin and float(avistamiento['latitude']) <= latmax:
+                lt.addLast(zonas, avistamiento)
     total= lt.size(zonas)
     first= lt.subList(zonas, 1, 3)
-    last=lt.subList(zonas, -2, 3)
-    primeros=lt.newList()
-    ultimos=lt.newList()
-    for linea in first:
-        x= lt.newList()
-        lt.addLast(x,linea['datetime'])
-        lt.addLast(x,linea['city'])
-        lt.addLast(x,linea['country'])
-        lt.addLast(x,linea['duration (seconds)'])
-        lt.addLast(x,linea['shape'])
-        lt.addLast(x,linea['latitude'])
-        lt.addLast(x,linea['longitude'])
-        lt.addLast(primeros,x)
-    for linea in last:
-        x= lt.newList()
-        lt.addLast(x,linea['datetime'])
-        lt.addLast(x,linea['city'])
-        lt.addLast(x,linea['country'])
-        lt.addLast(x,linea['duration (seconds)'])
-        lt.addLast(x,linea['shape'])
-        lt.addLast(x,linea['latitude'])
-        lt.addLast(x,linea['longitude'])
-        lt.addLast(ultimos,x)
-    return (total, primeros, ultimos)
-
-
-
-
-# Funciones de consulta
-
-# Funciones utilizadas para comparar elementos dentro de una lista
+    last=lt.subList(zonas, total-2, 3)
+    return (total, first, last)
 
 # Funciones de comparación
 def compare(valor1, valor2):
@@ -273,9 +213,3 @@ def compareDates(ufo1, ufo2):
     fecha1 = date1.date()
     fecha2 = date2.date()
     return fecha1 < fecha2
-def compareDurationH_M(ufo1, ufo2):
-    dur1= datetime.datetime.strptime(ufo1['duration (hours/min)'], "%H:%M")
-    dur2= datetime.datetime.strptime(ufo2['duration (hours/min)'], "%H:%M")
-    dura1= dur1.time()
-    dura2= dur2.time()
-    return dura1 < dura2
