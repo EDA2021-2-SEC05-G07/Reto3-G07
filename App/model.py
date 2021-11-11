@@ -135,7 +135,7 @@ def duration(catalog, segmin, segmax):
     primeros=lt.newList()
     ultimos=lt.newList()
     for linea in first:
-        x= newList()
+        x= lt.newList()
         lt.addLast(x,linea['datetime'])
         lt.addLast(x,linea['city'])
         lt.addLast(x,linea['country'])
@@ -143,7 +143,7 @@ def duration(catalog, segmin, segmax):
         lt.addLast(x,linea['shape'])
         lt.addLast(primeros,x)
     for linea in last:
-        x= newList()
+        x= lt.newList()
         lt.addLast(x,linea['datetime'])
         lt.addLast(x,linea['city'])
         lt.addLast(x,linea['country'])
