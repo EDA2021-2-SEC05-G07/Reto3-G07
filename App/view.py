@@ -74,9 +74,18 @@ while True:
         ultimos3 = controller.getultimos3(ordenada)
         print("La información de los últimos 3 avistamientos es: "+str(ultimos3))
     elif int(inputs[0]) == 3:
+        segmin = input("Ingrese el ímite inferior en segundos.")
+        segmax = input("Ingrese el ímite inferior en segundos.")
+        duration= controller.getduration(catalog, segmin, segmax)
+        total= lt.size(duration[0])
+        print("El total de los avistamientos en el rango es: "+ str(total))
+        primeros= duration[1]
+        print("los primeros 3 avistamientos dentro del rango son: " + str(primeros))
+        ultimos= duration[2]
+        print("los ultimos 3 avistamientos dentro del rango son: " + str(ultimos))
         pass
     elif int(inputs[0]) == 4:
-        inferior = input("Ingrese el ímite inferior en formato HH: MM.")
+        inferior = input("Ingrese el límite superior en formato HH: MM.")
         superior = input("Ingrese el límite superior en formato HH: MM.")
         size, listaOrdenada = controller.getdurationHrs_min(catalog, inferior, superior)
         print("El total de los avistamientos en el rango es: "+ str(size))
