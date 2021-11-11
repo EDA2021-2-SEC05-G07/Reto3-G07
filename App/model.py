@@ -57,6 +57,8 @@ def iniciarDatos():
                                         comparefunction=compare)
     catalog['duration (seconds)']=om.newMap(omaptype='BST',
                                       comparefunction=compare)
+    catalog['longitude']=om.newMap(omaptype='BST',
+                                      comparefunction=compare)
     return catalog
 
 # Funciones para agregar informacion al catalogo
@@ -94,7 +96,7 @@ def addAvist(catalog, avist):
         lstDatetime = om.get(catalog['datetime'], datetime)['value']
         lt.addLast(lstDatetime, avist)
         om.put(catalog['datetime'], datetime, lstDatetime)
-#indice duracion
+    #indice duracion
     durationSec = avist['duration (seconds)']
     dursec = om.contains(catalog['duration (seconds)'], durationSec)
     if not dursec:
@@ -106,6 +108,17 @@ def addAvist(catalog, avist):
         lt.addLast(lstDurationSec, avist)
         om.put(catalog['duration (seconds)'], durationSec, lstDurationSec)
     
+    #indice longitud
+    long = avist['longitude']
+    l = om.contains(catalog['longitude'], long)
+    if not dursec:
+        lstlong= lt.newList()
+        lt.addLast(lstlong,avist)
+        om.put(catalog['longitude'], long, lstlong)
+    else: 
+        lstlong = om.get(catalog['longitude'], long)['value']
+        lt.addLast(lstlong, avist)
+        om.put(catalog['longitude'], long, lstlong)
 
 # Requerimiento 1
 def ListaCiudad(catalog, ciudad):
@@ -120,7 +133,7 @@ def ListaCiudad(catalog, ciudad):
             lt.addLast(info, ciudad['shape'])
             lt.addLast(listaciudad, info)
     return listaciudad
-    
+
 def avistCiudad2(catalog, ciudad):
     tamaño = lt.size(om.keySet(catalog['city']))
     entry = om.get(catalog['city'], ciudad)
@@ -181,7 +194,7 @@ def durationHrs_min(catalog, inferior, superior):
             lt.addLast(info, linea['duration (seconds)'])
             lt.addLast(info, linea['shape'])
             lt.addLast(lst,info)
-            listaOrdenada = sa.sort(lst, compareDurationH_M)
+    listaOrdenada = sa.sort(lst, compareDurationH_M)
     return size, listaOrdenada
     
 #Req 4
@@ -202,7 +215,39 @@ def avistRangoFechas(catalog, inferior, superior):
             lt.addLast(lst,info)
     listaOrdenada = sa.sort(lst, compareDates)
     return size, listaOrdenada
-    #for llave in lt.iterator(llaves_rango):
+#req 5
+def avistZona(catalog, longmin, longmax, latmin, latmax):
+    zonas= lt.newList()
+    avist= om.values(catalog['longitude'], longmin, longmax)
+    for avistamiento in avist:
+        if avistamiento['latitude'] >= latmin and avistamiento['latitude'] <= latmax:
+            lt.addLast(zonas, avistamiento)
+    total= lt.size(zonas)
+    first= lt.subList(zonas, 1, 3)
+    last=lt.subList(zonas, -2, 3)
+    primeros=lt.newList()
+    ultimos=lt.newList()
+    for linea in first:
+        x= lt.newList()
+        lt.addLast(x,linea['datetime'])
+        lt.addLast(x,linea['city'])
+        lt.addLast(x,linea['country'])
+        lt.addLast(x,linea['duration (seconds)'])
+        lt.addLast(x,linea['shape'])
+        lt.addLast(x,linea['latitude'])
+        lt.addLast(x,linea['longitude'])
+        lt.addLast(primeros,x)
+    for linea in last:
+        x= lt.newList()
+        lt.addLast(x,linea['datetime'])
+        lt.addLast(x,linea['city'])
+        lt.addLast(x,linea['country'])
+        lt.addLast(x,linea['duration (seconds)'])
+        lt.addLast(x,linea['shape'])
+        lt.addLast(x,linea['latitude'])
+        lt.addLast(x,linea['longitude'])
+        lt.addLast(ultimos,x)
+    return (total, primeros, ultimos)
 
 
 

@@ -81,6 +81,10 @@ def getdurationHrs_min(catalog, inferior, superior):
 def getavistRangoFechas(catalog, inferior, superior):
     size, listaOrdenada = model.avistRangoFechas(catalog, inferior, superior)
     return size, listaOrdenada
+#req 5
+def getavistZona(catalog, longmin, longmax, latmin, latmax):
+    tupla= model.avistZona(catalog, longmin, longmax, latmin, latmax)
+    return tupla
 # Inicialización del Catálogo de libros
 
 # Funciones para la carga de datos

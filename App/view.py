@@ -74,8 +74,8 @@ while True:
         ultimos3 = controller.getultimos3(ordenada)
         print("La información de los últimos 3 avistamientos es: "+str(ultimos3))
     elif int(inputs[0]) == 3:
-        segmin = input("Ingrese el ímite inferior en segundos.")
-        segmax = input("Ingrese el ímite inferior en segundos.")
+        segmin = input("Ingrese el límite inferior en segundos.")
+        segmax = input("Ingrese el límite superior en segundos.")
         duration= controller.getduration(catalog, segmin, segmax)
         total= lt.size(duration[0])
         print("El total de los avistamientos en el rango es: "+ str(total))
@@ -103,6 +103,17 @@ while True:
         ult3= controller.getultimos3(listaOrdenada)
         print("los ultimos 3 avistamientos dentro del rango son: " + str(ult3))
     elif int(inputs[0]) == 6:
+        longmin = input("Ingrese el ímite inferior en segundos.")
+        longmax = input("Ingrese el ímite inferior en segundos.")
+        latmin = input("Ingrese el ímite inferior en segundos.")
+        latmax = input("Ingrese el ímite inferior en segundos.")
+        zonas= controller.getavistZona(catalog, longmin, longmax, latmin, latmax)
+        total= lt.size(duration[0])
+        print("El total de los avistamientos en el rango es: "+ str(total))
+        primeros= duration[1]
+        print("los primeros 3 avistamientos dentro del rango son: " + str(primeros))
+        ultimos= duration[2]
+        print("los ultimos 3 avistamientos dentro del rango son: " + str(ultimos))
         pass
     else:
         sys.exit(0)
