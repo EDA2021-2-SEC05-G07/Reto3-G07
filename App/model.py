@@ -26,7 +26,6 @@
 
 
 
-from DISClib.DataStructures.arraylist import newList
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
@@ -56,6 +55,8 @@ def iniciarDatos():
                                         comparefunction=compare)
     catalog['datetime'] = om.newMap(omaptype='BST', 
                                         comparefunction=compare)
+    catalog['duration (seconds)']=om.newMap(omaptype='BST',
+                                      comparefunction=compare)
     return catalog
 
 # Funciones para agregar informacion al catalogo
@@ -71,7 +72,7 @@ def addAvist(catalog, avist):
         listaCiudad = om.get(catalog['city'], ciudad)['value']
         lt.addLast(listaCiudad, avist)
         om.put(catalog['city'], ciudad, listaCiudad)
-    #indice para req 3
+     #indice para req 3
     durationHM = avist['duration (hours/min)']
     estaDuration = om.contains(catalog['duration (hours/min)'], durationHM)
     if not estaDuration:
@@ -82,7 +83,7 @@ def addAvist(catalog, avist):
         lstDurationHM = om.get(catalog['duration (hours/min)'], durationHM)['value']
         lt.addLast(lstDurationHM, avist)
         om.put(catalog['duration (hours/min)'], durationHM, lstDurationHM)
-    #indice fechas
+  #indice fechas
     datetime = avist['datetime']
     estaDatetime = om.contains(catalog['datetime'], datetime)
     if not estaDatetime:
@@ -126,6 +127,31 @@ def ultimos3(ordenada):
     ultimos=lt.subList(ordenada, (lt.size(ordenada))-3, 3)
     return ultimos
 
+#req 2
+def duration(catalog, segmin, segmax):
+    tiempos= om.values(catalog['duration (seconds)'], segmin, segmax)
+    first= lt.subList(tiempos, 1, 3)
+    last=lt.subList(tiempos, -2, 3)
+    primeros=lt.newList()
+    ultimos=lt.newList()
+    for linea in first:
+        x= newList()
+        lt.addLast(x,linea['datetime'])
+        lt.addLast(x,linea['city'])
+        lt.addLast(x,linea['country'])
+        lt.addLast(x,linea['duration (seconds)'])
+        lt.addLast(x,linea['shape'])
+        lt.addLast(primeros,x)
+    for linea in last:
+        x= newList()
+        lt.addLast(x,linea['datetime'])
+        lt.addLast(x,linea['city'])
+        lt.addLast(x,linea['country'])
+        lt.addLast(x,linea['duration (seconds)'])
+        lt.addLast(x,linea['shape'])
+        lt.addLast(ultimos,x)
+    return (tiempos, primeros, ultimos)
+
 #req 3
 def durationHrs_min(catalog, inferior, superior):
     llaves_rango = om.keys(catalog['duration (hours/min)'],inferior, superior)
@@ -144,7 +170,7 @@ def durationHrs_min(catalog, inferior, superior):
             lt.addLast(lst,info)
     listaOrdenada = sa.sort(lst, compareDurationH_M)
     return size, listaOrdenada
-
+    
 #Req 4
 def avistRangoFechas(catalog, inferior, superior):
     llaves_rango = om.keys(catalog['datetime'],inferior, superior)
@@ -164,8 +190,8 @@ def avistRangoFechas(catalog, inferior, superior):
     listaOrdenada = sa.sort(lst, compareDates)
     return size, listaOrdenada
     #for llave in lt.iterator(llaves_rango):
-        
-    
+
+
 
 
 # Funciones de consulta
